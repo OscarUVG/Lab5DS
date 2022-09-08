@@ -164,6 +164,18 @@ sns.barplot(x=y,y=x, palette="Blues_r").set_title("Trigrama no desastre")
 plt.show()
 
 
+# --- Analisis de sentimientos ---
+from nltk.sentiment import SentimentIntensityAnalyzer
+
+# Algoritmo pre entrenado para categorizar texto en positivo, negativo o neutro. 
+# sentimentValue es un real entre -1 y 1 que indica que tan positivo o negativo es cada tweet. 
+sia = SentimentIntensityAnalyzer()
+sentimentValue = np.zeros(len(train['text']))
+for k in range(len(train['text'])):
+    sentimentValue[k] = sia.polarity_scores(train['text'][k]).get('compound')
+train.insert(loc=len(train.columns), column = 'sentimentValue', value = sentimentValue)
+
+
 
 
 
