@@ -167,15 +167,29 @@ plt.show()
 # --- Analisis de sentimientos ---
 from nltk.sentiment import SentimentIntensityAnalyzer
 
-# Algoritmo pre entrenado para categorizar texto en positivo, negativo o neutro. 
-# sentimentValue es un real entre -1 y 1 que indica que tan positivo o negativo es cada tweet. 
 sia = SentimentIntensityAnalyzer()
+
 sentimentValue = np.zeros(len(train['text']))
 for k in range(len(train['text'])):
     sentimentValue[k] = sia.polarity_scores(train['text'][k]).get('compound')
 train.insert(loc=len(train.columns), column = 'sentimentValue', value = sentimentValue)
 
 
+# En promedio, el data set es un poco negativo.
+# La media de la columna sentimentValue es -0.14. 
+print("Media de sentimiento: ", train['sentimentValue'].mean())
+
+# Top 10 tweets mas negativos segun sentimentValue.
+print(train.sort_values(by='sentimentValue').head(10)['text'])
+
+# Top 10 tweets mas negativos segun sentimentValue.
+print(train.sort_values(by='sentimentValue', ascending=False).head(10)['text'])
+
+# Promedio de sentimentValue para tweets relacionados a desastre y no desastre.
+# La media de los tweets sobre desastre es -0.26.
+# La media de los tweets sobre no desastre es -0.05. 
+print("Media sentimentValue desastre: ", train[train["target"] == 1]['sentimentValue'].mean())
+print("Media sentimentValue no desastre: ", train[train["target"] == 0]['sentimentValue'].mean())
 
 
 
