@@ -193,3 +193,23 @@ print("Media sentimentValue no desastre: ", train[train["target"] == 0]['sentime
 
 
 
+#Función de clasificación
+
+x_train, x_test, y_train, y_test = train_test_split(train.text, train.target, random_state=69)
+
+vectorizer = feature_extraction.text.TfidfVectorizer()
+
+train_vectors = vectorizer.fit_transform(train["text"])
+
+clf = linear_model.RidgeClassifier()
+
+from sklearn.feature_extraction.text import HashingVectorizer
+hv = HashingVectorizer()
+hv.fit(train)
+X_train_hash = hv.fit_transform(train['text'])
+X_test_hash = train['sentimentValue']
+Y_train_hash = hv.transform(test['text'])
+
+ridge = linear_model.RidgeClassifier()
+scores = model_selection.cross_val_score(ridge, X_train_hash, train["target"], cv=3)
+print(scores)
